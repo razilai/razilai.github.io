@@ -1,0 +1,62 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { ArrowUpRight } from '@lucide/astro';
+import ProjectIcon from './ProjectIcon.astro';
+import Tag from './Tag.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, kind, icon, highlights, stack, cover, coverAlt, thumbnail, thumbnailAlt } = project.data;
+const image = thumbnail ?? cover;
+const imageAlt = (thumbnail ? thumbnailAlt : coverAlt) ?? '';
+// The full stack is listed on the project page
+const maxTags = 3;
+const shownTags = stack.slice(0, maxTags);
+const hiddenTagCount = stack.length - shownTags.length;
+---
+
+<a
+  href={`/projects/${project.id}/`}
+  class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition hover:border-line-strong md:h-44 md:flex-row"
+>
+  <div class="relative aspect-[4/3] shrink-0 overflow-hidden border-b border-line bg-white md:h-full md:border-r md:border-b-0 dark:brightness-90">
+    {
+      image ? (
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[400, 800, 1200]}
+          sizes="(min-width: 768px) 235px, 100vw"
+          class="absolute inset-0 size-full object-cover"
+        />
+      ) : (
+        <div class="absolute inset-0 grid place-items-center bg-raised">
+          <ProjectIcon name={icon} size="lg" />
+        </div>
+      )
+    }
+  </div>
+  <div class="flex min-w-0 flex-1 flex-col px-5 py-4">
+    <div class="flex items-center gap-2 text-sm text-muted">
+      <ProjectIcon name={icon} size="xs" />
+      {kind}
+    </div>
+    <h3 class="mt-2 flex items-center gap-1 text-lg font-semibold text-fg">
+      {title}
+      <ArrowUpRight
+        size={18}
+        class="text-muted transition group-hover:text-fg"
+        aria-hidden="true"
+      />
+    </h3>
+    <p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-body">{highlights[0]}</p>
+    <ul class="mt-auto flex flex-wrap gap-1.5 pt-3">
+      {shownTags.map((tech) => <Tag>{tech}</Tag>)}
+      {hiddenTagCount > 0 && <Tag>+{hiddenTagCount}</Tag>}
+    </ul>
+  </div>
+</a>

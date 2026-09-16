@@ -1,0 +1,25 @@
+---
+import TechItem from './TechItem.astro';
+import type { Tech } from '../data/cv';
+
+interface Props {
+  rows: { label: string; items: (Tech | string)[] }[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class="space-y-5">
+  {
+    rows.map(({ label, items }) => (
+      <div class="grid gap-2 sm:grid-cols-[9rem_1fr] sm:gap-6">
+        <dt class="font-medium text-fg">{label}</dt>
+        <dd>
+          <ul class="flex flex-wrap items-center gap-y-1.5 [&>li:not(:last-child)]:after:mx-2.5 [&>li:not(:last-child)]:after:text-faint [&>li:not(:last-child)]:after:content-['·']">
+            {items.map((item) => (typeof item === 'string' ? <li>{item}</li> : <TechItem tech={item} />))}
+          </ul>
+        </dd>
+      </div>
+    ))
+  }
+</dl>

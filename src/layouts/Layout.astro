@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Wide container for the home page; narrow reading width otherwise */
+  wide?: boolean;
+}
+
+const {
+  title,
+  description = 'Ilai Raz, Data Science & Engineering student at the Technion. Machine learning, NLP and big-data projects.',
+  wide = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Saved choice wins; otherwise follow the OS. Runs before paint to avoid a flash.
+      (() => {
+        const stored = () => {
+          try {
+            return localStorage.getItem('theme');
+          } catch {
+            return null;
+          }
+        };
+        const media = matchMedia('(prefers-color-scheme: dark)');
+        const apply = () =>
+          document.documentElement.classList.toggle('dark', (stored() ?? (media.matches ? 'dark' : 'light')) === 'dark');
+        apply();
+        media.addEventListener('change', () => !stored() && apply());
+      })();
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="bg-bg text-body antialiased">
+    <SiteHeader />
+    <div class:list={['mx-auto px-6', wide ? 'max-w-6xl' : 'max-w-3xl py-16']}>
+      <slot />
+    </div>
+  </body>
+</html>

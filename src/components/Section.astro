@@ -1,0 +1,16 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  compact?: boolean;
+}
+
+const { id, title, compact = false } = Astro.props;
+---
+
+<section id={id} class:list={['scroll-mt-24', compact ? 'pt-6 pb-16 sm:pb-20' : 'py-16 sm:py-20']}>
+  <h2 class="text-3xl font-semibold tracking-tight text-fg">{title}</h2>
+  <div class:list={[compact ? 'mt-6' : 'mt-10']}>
+    <slot />
+  </div>
+</section>

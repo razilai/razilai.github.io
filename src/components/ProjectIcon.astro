@@ -1,0 +1,23 @@
+---
+import { projectIcons, type ProjectIconName } from '../data/icons';
+
+interface Props {
+  name: ProjectIconName;
+  size?: 'xs' | 'sm' | 'lg';
+}
+
+const { name, size = 'sm' } = Astro.props;
+const Icon = projectIcons[name];
+const box = { xs: 'size-6 rounded-md', sm: 'size-10 rounded-lg', lg: 'size-14 rounded-2xl' }[size];
+const glyph = { xs: 14, sm: 20, lg: 28 }[size];
+---
+
+<span
+  class:list={[
+    'grid shrink-0 place-items-center border border-line bg-raised text-body',
+    box,
+  ]}
+  aria-hidden="true"
+>
+  <Icon size={glyph} stroke-width={1.75} />
+</span>
