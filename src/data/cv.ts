@@ -1,8 +1,7 @@
 export const profile = {
     name: 'Ilai Raz',
     role: 'Data Science & Engineering',
-    thub.com /
-        school: 'Technion',
+    school: 'Technion',
     location: 'Tel Aviv, Israel',
     summary:
         'Honors student in Data Science & Engineering @ Technion. I like applying data science and statistic to solve real-world problems',
